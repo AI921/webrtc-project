@@ -1,4 +1,4 @@
-const socket = io("http://localhost:5000");
+const socket = io("https://webrtc-project-1-30t2.onrender.com");
 
 let peer = null;
 let localStream = null;
@@ -124,3 +124,4 @@ socket.on("answer_made", async ({ answer }) => {
 
 // ------------------- USER NOT FOUND -------------------
 socket.on("user_not_found", () => alert("User is offline"));
+
