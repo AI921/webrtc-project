@@ -1,30 +1,30 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-const cors = require("cors");
+const path = require("path");
 
 const app = express();
-app.use(cors());
 const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: "*" } });
 
-const io = new Server(server, {
-  cors: { origin: "*" },
+// Serve client files
+app.use(express.static(path.join(__dirname, "../client")));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/index.html"));
 });
 
-// Only two users (lowercase)
-const users = {
-  ashish: null,
-  maa: null,
-};
+// Only two users
+const users = { ashish: null, maa: null };
 
 io.on("connection", (socket) => {
   let username = null;
 
-  // ---------------- LOGIN ----------------
+  // LOGIN
   socket.on("login", (name) => {
     if (!name) return socket.emit("login_error", "Username required");
 
-    const lowerName = name.toLowerCase(); // convert to lowercase
+    const lowerName = name.toLowerCase();
     if (!(lowerName in users)) {
       socket.emit("login_error", "Username not found");
       return;
@@ -36,14 +36,14 @@ io.on("connection", (socket) => {
     console.log(`${username} logged in`);
   });
 
-  // ---------------- CHAT ----------------
+  // CHAT
   socket.on("send_message", ({ message }) => {
     const targetName = username === "ashish" ? "maa" : "ashish";
     const target = users[targetName];
     if (target) io.to(target).emit("receive_message", { from: username, message });
   });
 
-  // ---------------- CALL ----------------
+  // CALL
   socket.on("call_user", ({ offer, type }) => {
     const targetName = username === "ashish" ? "maa" : "ashish";
     const target = users[targetName];
@@ -57,13 +57,12 @@ io.on("connection", (socket) => {
     if (target) io.to(target).emit("answer_made", { from: username, answer });
   });
 
-  // ---------------- DISCONNECT ----------------
+  // DISCONNECT
   socket.on("disconnect", () => {
-    if (username) {
-      users[username] = null;
-      console.log(`${username} disconnected`);
-    }
+    if (username) users[username] = null;
   });
 });
 
-server.listen(5000, () => console.log("✅ Server running on http://localhost:5000"));
+// Use Render port or 5000 locally
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
