@@ -1,5 +1,6 @@
 const socket = io("https://webrtc-project-1-30t2.onrender.com");
 
+
 let peer = null;
 let localStream = null;
 let username = null;
@@ -124,4 +125,3 @@ socket.on("answer_made", async ({ answer }) => {
 
 // ------------------- USER NOT FOUND -------------------
 socket.on("user_not_found", () => alert("User is offline"));
-
