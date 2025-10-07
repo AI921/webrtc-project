@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mini WhatsApp Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f0f2f5;
+  color: #333;
+}
+
+#loginDiv, #mainDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+#loginDiv select, #loginDiv button {
+  padding: 12px 18px;
+  margin: 5px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  font-weight: 500;
+}
+#loginDiv button {
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+#loginDiv button:hover { background: #0056b3; }
+
+#mainDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+#header { font-weight: 600; font-size: 20px; margin-bottom: 15px; }
+
+#videoArea {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+video {
+  border-radius: 12px;
+  background: #000;
+  width: 300px;
+  height: 220px;
+}
+
+#callControls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  align-items: center;
+  font-weight: 500;
+}
+#callBtn {
+  padding: 10px 18px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+#callBtn:hover { background: #218838; }
+
+#chatBox {
+  width: 620px;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 10px;
+  background: #fff;
+  margin-bottom: 10px;
+}
+#chatBox p { margin: 6px 0; font-size: 15px; }
+
+#messageInput, #sendBtn {
+  padding: 10px 15px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+#sendBtn {
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-left: 5px;
+  font-weight: 600;
+}
+#sendBtn:hover { background: #0056b3; }
+
+#inputArea { display: flex; }
+
+/* Incoming Call Panel */
+#incomingCallPanel {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px 28px;
+  box-shadow: 0 5px 16px rgba(0,0,0,0.25);
+  text-align: center;
+  z-index: 999;
+  font-weight: 500;
+}
+#incomingCallPanel button {
+  padding: 10px 18px;
+  margin: 5px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+#acceptBtn { background: #28a745; color: white; }
+#acceptBtn:hover { background: #218838; }
+#rejectBtn { background: #dc3545; color: white; }
+#rejectBtn:hover { background: #b02a37; }
+</style>
+</head>
+<body>
+
+<div id="loginDiv">
+  <h2>Select User</h2>
+  <select id="usernameSelect">
+    <option value="">-- Choose User --</option>
+    <option value="ashish">ashish</option>
+    <option value="maa">maa</option>
+  </select>
+  <button id="loginBtn">Login</button>
+  <p id="loginMsg" style="color:red;"></p>
+</div>
+
+<div id="mainDiv" style="display:none;">
+  <div id="header">Logged in as: <span id="yourName"></span></div>
+
+  <div id="videoArea">
+    <video id="localVideo" autoplay playsinline muted></video>
+    <video id="remoteVideo" autoplay playsinline></video>
+  </div>
+
+  <div id="callControls">
+    <label><input type="checkbox" id="voiceOnlyCheck"> Voice Only</label>
+    <button id="callBtn">Call</button>
+  </div>
+
+  <div id="chatBox"></div>
+
+  <div id="inputArea">
+    <input id="messageInput" placeholder="Type message">
+    <button id="sendBtn">Send</button>
+  </div>
+</div>
+
+<!-- Incoming Call Panel -->
+<div id="incomingCallPanel">
+  <p id="callerInfo"></p>
+  <button id="acceptBtn">Accept</button>
+  <button id="rejectBtn">Reject</button>
+</div>
+
+<script src="http://localhost:5000/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
