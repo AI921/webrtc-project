@@ -1,5 +1,5 @@
-const socket = io("https://webrtc-project-1-30t2.onrender.com");
-
+// Connect to server dynamically (works locally and live)
+const socket = io(window.location.origin);
 
 let peer = null;
 let localStream = null;
