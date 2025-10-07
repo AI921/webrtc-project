@@ -8,11 +8,12 @@ const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
 // Serve client files
-app.use(express.static(path.join(__dirname, "../client")));
+app.use(express.static(path.join(__dirname, "client")));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/index.html"));
+  res.sendFile(path.join(__dirname, "client/index.html"));
 });
+
 
 // Only two users
 const users = { ashish: null, maa: null };
@@ -66,3 +67,4 @@ io.on("connection", (socket) => {
 // Use Render port or 5000 locally
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+
